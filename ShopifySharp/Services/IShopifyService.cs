@@ -7,6 +7,7 @@ namespace ShopifySharp
     {
         string APIVersion { get; }
         bool SupportsAPIVersioning { get; }
+        bool AdminAPI { get; set; }
 
         void SetExecutionPolicy(IRequestExecutionPolicy policy);
 

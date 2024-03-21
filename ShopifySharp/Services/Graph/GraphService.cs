@@ -44,9 +44,9 @@ namespace ShopifySharp
             return res["data"];
         }
 
-        public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null)
         {
-            var res = await PostAsync<JToken>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+            var res = await PostAsync<JToken>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken, headers);
             return res["data"];
         }
 
@@ -86,13 +86,13 @@ namespace ShopifySharp
         }
 #endif
 
-        private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
+        private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken, Dictionary<string, string> headers = null)
         {
             var req = BuildRequestUri("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, mediaType);
 
-            var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
+            var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken, headers);
 
             return res;
         }
@@ -104,9 +104,9 @@ namespace ShopifySharp
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        protected virtual async Task<T> SendAsync<T>(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
+        protected virtual async Task<T> SendAsync<T>(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null)
         {
-            var response = await ExecuteRequestCoreAsync<T>(req, HttpMethod.Post, cancellationToken, content, null, null, graphqlQueryCost, DateParseHandling.None);
+            var response = await ExecuteRequestCoreAsync<T>(req, HttpMethod.Post, cancellationToken, content, headers, null, graphqlQueryCost, DateParseHandling.None);
 
             CheckForErrors(response);
 

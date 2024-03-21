@@ -24,6 +24,7 @@ namespace ShopifySharp
 
         public virtual string APIVersion => "2024-01";
         public virtual bool SupportsAPIVersioning => true;
+        public virtual bool AdminAPI { get; set; } = true;
 
         protected Uri _ShopUri { get; set; }
         protected string _AccessToken { get; set; }
@@ -144,7 +145,10 @@ namespace ShopifySharp
                 Port = 443,
                 Path = SupportsAPIVersioning ? $"admin/api/{APIVersion}/{path}" : $"admin/{path}"
             };
-
+            if (!AdminAPI)
+            {
+                ub.Path = $"api/{APIVersion}/{path}";
+            }
             return new RequestUri(ub.Uri);
         }
 
@@ -159,7 +163,7 @@ namespace ShopifySharp
         {
             var msg = new CloneableRequestMessage(uri.ToUri(), method, content);
 
-            if (!string.IsNullOrEmpty(_AccessToken))
+            if (AdminAPI && !string.IsNullOrEmpty(_AccessToken))
             {
                 msg.Headers.Add(REQUEST_HEADER_ACCESS_TOKEN, _AccessToken);
             }

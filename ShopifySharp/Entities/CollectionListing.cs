@@ -22,7 +22,7 @@ namespace ShopifySharp
         public ProductImage DefaultProductImage { get; set; }
 
         [JsonProperty("image")]
-        public CollectionImage[] Image { get; set; }
+        public CollectionImage Image { get; set; }
 
         [JsonProperty("handle")]
         public string Handle { get; set; }

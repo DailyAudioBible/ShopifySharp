@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace ShopifySharp
         /// </param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default);
+        Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null);
 
         /// <summary>
         /// Executes a Graph API Call.
